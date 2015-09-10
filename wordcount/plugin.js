@@ -14,6 +14,7 @@ CKEDITOR.plugins.add("wordcount", {
             lastCharCount = -1,
             limitReachedNotified = false,
             limitRestoredNotified = false,
+            limitInMarginNotified = false,
             snapShot = editor.getSnapshot();
 
         var dispatchEvent = function (type, currentLength, maxLength) {
@@ -60,6 +61,10 @@ CKEDITOR.plugins.add("wordcount", {
             //MAXLENGTH Properties
             maxWordCount: -1,
             maxCharCount: -1,
+
+            // Margin properties
+            limitWordCountMargin: 0,
+            limitCharCountMargin: 0,
 
             //DisAllowed functions
             wordCountGreaterThanMaxLengthEvent: function (currentLength, maxLength) {
@@ -216,6 +221,10 @@ CKEDITOR.plugins.add("wordcount", {
             counterElement(editorInstance).className = "cke_path_item";
         }
 
+        function limitInMargin(editorInstance) {
+            counterElement(editorInstance).className = "cke_path_item cke_wordcountLimitInMargin";
+        }
+
         function updateCounter(editorInstance) {
             var paragraphs = 0,
                 wordCount = 0,
@@ -267,12 +276,16 @@ CKEDITOR.plugins.add("wordcount", {
             }
 
             // Check for word limit and/or char limit
-            if ((config.maxWordCount > -1 && wordCount > config.maxWordCount && deltaWord > 0) ||
-                (config.maxCharCount > -1 && charCount > config.maxCharCount && deltaChar > 0)) {
+            if ((config.maxWordCount > -1 && wordCount > (config.maxWordCount + config.limitWordCountMargin) && deltaWord > 0) ||
+                (config.maxCharCount > -1 && charCount > (config.maxCharCount + config.limitCharCountMargin) && deltaChar > 0)) {
 
                 limitReached(editorInstance, limitReachedNotified);
-            } else if ((config.maxWordCount == -1 || wordCount < config.maxWordCount) &&
-            (config.maxCharCount == -1 || charCount < config.maxCharCount)) {
+            } else if ((config.maxWordCount > -1 && config.limitWordCountMargin > 0 && wordCount >= (config.maxWordCount - config.limitWordCountMargin)) ||
+                (config.maxCharCount > -1 && config.limitCharCountMargin > 0 && charCount >= (config.maxCharCount - config.limitCharCountMargin))) {
+
+                limitInMargin(editorInstance, limitInMarginNotified);
+            } else if ((config.maxWordCount == -1 || wordCount <= (config.maxWordCount + config.limitWordCountMargin)) &&
+            (config.maxCharCount == -1 || charCount <= (config.maxCharCount + config.limitCharCountMargin))) {
 
                 limitRestored(editorInstance);
             } else {
