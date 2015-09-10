@@ -61,3 +61,15 @@ config.wordcount = {
 };
 ````
 
+##### Events
+````js
+CKEDITOR.instances.ckeditor.on('limitReached', function(e) {
+    console.log('limitReached');
+});
+CKEDITOR.instances.ckeditor.on('limitRestored', function(e) {
+    console.log('limitRestored');
+});
+CKEDITOR.instances.ckeditor.on('limitInMargin', function(e) {
+    console.log('limitInMargin');
+});
+````

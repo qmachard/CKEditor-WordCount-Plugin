@@ -199,6 +199,7 @@ CKEDITOR.plugins.add("wordcount", {
         function limitReached(editorInstance, notify) {
             limitReachedNotified = true;
             limitRestoredNotified = false;
+            limitInMarginNotified = false;
 
             if (config.hardLimit) {
                 editorInstance.loadSnapshot(snapShot);
@@ -213,21 +214,33 @@ CKEDITOR.plugins.add("wordcount", {
         }
 
         function limitRestored(editorInstance) {
+            var notify = limitRestoredNotified;
             limitRestoredNotified = true;
             limitReachedNotified = false;
+            limitInMarginNotified = false;
+
             editorInstance.config.Locked = 0;
             snapShot = editor.getSnapshot();
 
-            counterElement(editorInstance).className = "cke_path_item";
+            if(!notify) {
+                counterElement(editorInstance).className = "cke_path_item";
+                editorInstance.fire("limitRestored", {}, editor);
+            }
         }
 
         function limitInMargin(editorInstance) {
-            limitRestoredNotified = true;
+            var notify = limitInMarginNotified;
+            limitRestoredNotified = false;
             limitReachedNotified = false;
+            limitInMarginNotified = true;
+
             editorInstance.config.Locked = 0;
             snapShot = editor.getSnapshot();
 
-            counterElement(editorInstance).className = "cke_path_item cke_wordcountLimitInMargin";
+            if(!notify) {
+                counterElement(editorInstance).className = "cke_path_item cke_wordcountLimitInMargin";
+                editorInstance.fire("limitInMargin", {}, editor);
+            }
         }
 
         function updateCounter(editorInstance) {
