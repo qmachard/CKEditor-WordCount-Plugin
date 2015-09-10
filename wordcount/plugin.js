@@ -222,6 +222,11 @@ CKEDITOR.plugins.add("wordcount", {
         }
 
         function limitInMargin(editorInstance) {
+            limitRestoredNotified = true;
+            limitReachedNotified = false;
+            editorInstance.config.Locked = 0;
+            snapShot = editor.getSnapshot();
+
             counterElement(editorInstance).className = "cke_path_item cke_wordcountLimitInMargin";
         }
 
@@ -276,20 +281,20 @@ CKEDITOR.plugins.add("wordcount", {
             }
 
             // Check for word limit and/or char limit
-            if ((config.maxWordCount > -1 && wordCount > (config.maxWordCount + config.limitWordCountMargin) && deltaWord > 0) ||
-                (config.maxCharCount > -1 && charCount > (config.maxCharCount + config.limitCharCountMargin) && deltaChar > 0)) {
+            if ((config.maxWordCount > -1 && wordCount > (config.maxWordCount + config.limitWordCountMargin)) ||
+                (config.maxCharCount > -1 && charCount > (config.maxCharCount + config.limitCharCountMargin))) {
 
                 limitReached(editorInstance, limitReachedNotified);
             } else if ((config.maxWordCount > -1 && config.limitWordCountMargin > 0 && wordCount >= (config.maxWordCount - config.limitWordCountMargin)) ||
                 (config.maxCharCount > -1 && config.limitCharCountMargin > 0 && charCount >= (config.maxCharCount - config.limitCharCountMargin))) {
 
-                limitInMargin(editorInstance, limitInMarginNotified);
+                limitInMargin(editorInstance);
             } else if ((config.maxWordCount == -1 || wordCount <= (config.maxWordCount + config.limitWordCountMargin)) &&
             (config.maxCharCount == -1 || charCount <= (config.maxCharCount + config.limitCharCountMargin))) {
 
                 limitRestored(editorInstance);
             } else {
-                snapShot = editorInstance.getSnapshot();
+                snapShot = editorInstance.getSnapshot()
             }
 
             // Fire Custom Events
