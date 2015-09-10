@@ -340,7 +340,7 @@ CKEDITOR.plugins.add("wordcount", {
         }, editor, null, 100);
 
         editor.on("paste", function(event) {
-            if (config.maxWordCount > 0 || config.maxCharCount > 0) {
+            if ((config.maxWordCount > 0 || config.maxCharCount > 0) && config.hardLimit) {
 
                 // Check if pasted content is above the limits
                 var wordCount = -1,
