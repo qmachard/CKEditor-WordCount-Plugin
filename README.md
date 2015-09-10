@@ -48,7 +48,16 @@ config.wordcount = {
     maxWordCount: 4,
 
     // Maximum allowed Char Count
-	maxCharCount: 10
+	maxCharCount: 10,
+
+	// Blocks writing if the limit is exceeded
+    hardLimit: true,
+
+    // Add a margin to the Word Count Limit
+    limitWordCountMargin: 10,
+
+    // Add a margin to the Char Count Limit
+    limitCharCountMargin: 10
 };
 ````
 
