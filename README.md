@@ -19,57 +19,37 @@ Licensed under the terms of the MIT License.
 ####Installation
 
  1. Extract the contents of the file into the "plugins" folder of CKEditor.
- 2. In the CKEditor configuration file (config.js) add the following code:
+ 2. http://ckeditor.com/addon/notification - download the Notification Plugin and all its dependencies.
+ 3. In the CKEditor configuration file (config.js) add the following code:
 
 ````js
-config.extraPlugins = 'wordcount';
+config.extraPlugins = 'wordcount,notification';
 ````
-
+ 4. You can add the following config. if you need other than the default settings
 
 ````js
 config.wordcount = {
 
-    // Whether or not you want to show the Paragraphs Count
+    // Whether or not you want to show the Paragraphs Count, Default Value: true
     showParagraphs: true,
 
-    // Whether or not you want to show the Word Count
+    // Whether or not you want to show the Word Count, Default Value: true
     showWordCount: true,
 
-    // Whether or not you want to show the Char Count
+    // Whether or not you want to show the Char Count, Default Value: false
     showCharCount: false,
 
-    // Whether or not you want to count Spaces as Chars
+    // Whether or not you want to count Spaces as Chars, Default Value: false
     countSpacesAsChars: false,
 
-    // Whether or not to include Html chars in the Char Count
+    // Whether or not to include Html chars in the Char Count, Default Value: false
     countHTML: false,
     
-    // Maximum allowed Word Count
-    maxWordCount: 4,
+    // Maximum allowed Word Count that can be entered in the editor, Default Value: -1 (unlimited)
+    maxWordCount: -1,
 
-    // Maximum allowed Char Count
-	maxCharCount: 10,
-
-	// Blocks writing if the limit is exceeded
-    hardLimit: true,
-
-    // Add a margin to the Word Count Limit
-    limitWordCountMargin: 10,
-
-    // Add a margin to the Char Count Limit
-    limitCharCountMargin: 10
+    // Maximum allowed Chararcater Count entered be in the editor, Default Value: -1 (unlimited)
+    maxCharCount: -1
 };
 ````
 
-##### Events
-````js
-CKEDITOR.instances.ckeditor.on('limitReached', function(e) {
-    console.log('limitReached');
-});
-CKEDITOR.instances.ckeditor.on('limitRestored', function(e) {
-    console.log('limitRestored');
-});
-CKEDITOR.instances.ckeditor.on('limitInMargin', function(e) {
-    console.log('limitInMargin');
-});
-````
